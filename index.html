@@ -1,137 +1,709 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="用几分钟识别当下更值得优先调整的财富行为与资源配置模式。"
-    />
-    <meta name="theme-color" content="#dce8de" />
-    <title>Hersperia · 财富增长阻力测试</title>
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23dce8de'/%3E%3Cpath d='M17 15v34M47 15v34M17 32h30' stroke='%23916f34' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
-    />
-    <link rel="stylesheet" href="./styles.css?v=4" />
-  </head>
-  <body>
-    <main id="app" class="app-shell">
-      <section id="intro-screen" class="screen intro-screen" aria-labelledby="intro-title">
-        <header class="site-header">
-          <a class="brand" href="#" aria-label="Hersperia 首页">
-            <span class="brand-monogram" aria-hidden="true">H</span>
-            <span>
-              <strong>HERSPERIA</strong>
-              <small id="brand-subtitle">赫境</small>
-            </span>
-          </a>
-          <span class="privacy-note">仅保存在当前设备</span>
-        </header>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#dce8de"><meta name="description" content="从你的日常选择中，探索两种相遇的财富风格。">
+  <title>Hersperia · 你的双人物财富原型</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23dce8de'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='44' font-family='serif' fill='%2398763b'%3EH%3C/text%3E%3C/svg%3E">
+  <style>:root {
+  --bg: #dce8de;
+  --bg-deep: #cfdfd1;
+  --surface: #f2f6ef;
+  --surface-warm: #f7f1e2;
+  --ink: #21362e;
+  --ink-soft: #586b63;
+  --gold: #98763b;
+  --gold-bright: #c4a45f;
+  --gold-pale: #ddcea3;
+  --line: rgba(75, 91, 81, 0.22);
+  --shadow: rgba(36, 58, 49, 0.13);
+  --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", STSong, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+}
 
-        <div class="intro-layout">
-          <div class="intro-copy">
-            <p id="intro-eyebrow" class="eyebrow">WEALTH GROWTH · FIELD NOTE 01</p>
-            <h1 id="intro-title">未来五年，<br />你的财富增长<br />最容易卡在哪一环？</h1>
-            <p id="intro-lead" class="intro-lead">
-              不是判断你会不会赚钱，而是看清：此刻哪一种行为与资源配置模式，最值得先被调整。
-            </p>
+* { box-sizing: border-box; }
 
-            <div id="test-meta" class="test-meta" aria-label="测试信息"></div>
+html { min-width: 320px; background: var(--bg); }
 
-            <div class="intro-actions">
-              <button id="start-button" class="button button-primary" type="button">开始测试</button>
-              <button id="previous-result-button" class="button button-text" type="button" hidden>
-                查看上次结果
-              </button>
-            </div>
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(255, 250, 231, 0.72), transparent 27rem),
+    radial-gradient(circle at 86% 78%, rgba(194, 161, 92, 0.14), transparent 24rem),
+    linear-gradient(145deg, var(--bg) 0%, var(--bg-deep) 100%);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
 
-            <details class="method-note">
-              <summary>开始前，我想知道它如何工作</summary>
-              <p id="method-note-copy">
-                请按过去 12 个月的真实状态作答。结果会呈现一个主要模式和一个伴随模式，帮助你选择下一步的小实验。
-              </p>
-            </details>
-          </div>
+button, input { font: inherit; }
+button { color: inherit; }
 
-          <aside class="intro-aside" aria-label="测试说明">
-            <div class="edition-card">
-              <span class="edition-number">01</span>
-              <div>
-                <p id="edition-kicker">PRIVATE DRAFT</p>
-                <strong id="edition-copy">增长不是更用力，<br />而是先看清阻力。</strong>
-              </div>
-            </div>
-            <div class="motif-lines" aria-hidden="true"><span></span><span></span><span></span></div>
-            <p id="aside-caption" class="aside-caption">A quiet audit of attention, risk and value.</p>
-          </aside>
-        </div>
+.app-shell { min-height: 100vh; }
 
-        <footer class="intro-footer">
-          <span id="privacy-copy">本测试不收集手机号或邮箱</span>
-          <span id="advice-copy">非投资、财务或职业建议</span>
-        </footer>
-      </section>
+.screen {
+  width: min(1180px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px clamp(20px, 5vw, 72px) 30px;
+  display: flex;
+  flex-direction: column;
+}
 
-      <section id="quiz-screen" class="screen quiz-screen" aria-labelledby="question-title" hidden>
-        <header class="site-header compact-header">
-          <button class="brand brand-button" type="button" data-go-home aria-label="返回测试首页">
-            <span class="brand-monogram" aria-hidden="true">H</span>
-            <span><strong>HERSPERIA</strong><small id="quiz-brand-subtitle">财富增长阻力测试</small></span>
-          </button>
-          <span id="question-count" class="question-count">主题 01 / 12</span>
-        </header>
+.screen[hidden] { display: none !important; }
 
-        <div class="progress-track" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="1">
-          <span id="progress-bar"></span>
-        </div>
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
 
-        <div class="quiz-layout">
-          <div class="question-context">
-            <p id="question-section" class="eyebrow">你与行动</p>
-            <p id="question-guidance" class="question-guidance">选择最接近你过去 12 个月真实状态的一项。</p>
-          </div>
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.16em;
+}
 
-          <form id="question-form" class="question-card">
-            <fieldset aria-describedby="question-description question-guidance">
-              <legend id="question-title">一个赚钱想法如果步骤不够清楚，我很难迈出第一步。</legend>
-              <p id="question-description" class="question-description"></p>
-              <div id="answer-options" class="answer-options"></div>
-            </fieldset>
+.brand strong, .brand small { display: block; }
+.brand strong { font-size: 0.84rem; font-weight: 500; }
+.brand small { margin-top: 1px; color: var(--ink-soft); font-size: 0.72rem; letter-spacing: 0.28em; }
 
-            <p id="question-error" class="question-error" role="alert" hidden>请选择一个答案再继续。</p>
+.brand-monogram {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font-family: Georgia, serif;
+  font-size: 1.05rem;
+}
 
-            <div class="quiz-actions">
-              <button id="back-button" class="button button-text" type="button">上一题</button>
-              <button id="next-button" class="button button-primary" type="submit">下一题</button>
-            </div>
-          </form>
-        </div>
-      </section>
+.brand-button { padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
 
-      <section id="result-screen" class="screen result-screen" aria-labelledby="result-heading" hidden>
-        <header class="site-header compact-header">
-          <button class="brand brand-button" type="button" data-go-home aria-label="返回测试首页">
-            <span class="brand-monogram" aria-hidden="true">H</span>
-            <span><strong>HERSPERIA</strong><small>PERSONAL FIELD NOTE</small></span>
-          </button>
-          <span class="privacy-note">结果仅存于本机</span>
-        </header>
+.privacy-note, .question-count {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
 
-        <div id="result-content" class="result-content" aria-live="polite"></div>
+.privacy-note::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  vertical-align: 0.08em;
+}
 
-        <footer class="result-footer">
-          <p>
-            <span id="disclaimer-copy">本问卷用于自我觉察与内容体验，不是经验证的心理测量工具，也不构成投资、财务、税务、职业或法律建议。结果仅反映此刻的自我陈述，不代表固定人格、能力高低或未来收入。</span>
-          </p>
-          <button id="retake-button" class="button button-text" type="button">重新测试</button>
-        </footer>
-      </section>
-    </main>
+.intro-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+  gap: clamp(48px, 8vw, 110px);
+  align-items: center;
+  padding: clamp(54px, 9vh, 104px) 0 46px;
+}
 
-    <noscript>请启用 JavaScript 以完成这份互动测试。</noscript>
-    <script src="./test-config.js?v=4" defer></script>
-    <script src="./app.js?v=4" defer></script>
-  </body>
-</html>
+.eyebrow {
+  margin: 0 0 20px;
+  color: var(--gold);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3, p { overflow-wrap: anywhere; }
+
+h1 {
+  max-width: 760px;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(2.65rem, 6vw, 5.3rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.13;
+}
+
+.intro-lead {
+  max-width: 580px;
+  margin: 30px 0 0;
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: clamp(1.03rem, 1.8vw, 1.25rem);
+  line-height: 1.9;
+}
+
+.test-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  margin-top: 28px;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+}
+
+.test-meta span { display: inline-flex; align-items: center; }
+.test-meta span:not(:last-child)::after { content: "·"; margin-left: 26px; color: var(--gold); }
+
+.intro-actions, .quiz-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 12px 25px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.button:hover { transform: translateY(-1px); }
+.button:focus-visible, .brand-button:focus-visible, .answer-option:focus-within { outline: 3px solid rgba(152, 118, 59, 0.28); outline-offset: 3px; }
+
+.button-primary {
+  background: var(--ink);
+  color: #f8f5e9;
+  box-shadow: 0 10px 30px rgba(33, 54, 46, 0.16);
+  letter-spacing: 0.1em;
+}
+
+.button-primary:hover { background: #2a463b; }
+
+.button-text {
+  border-color: rgba(152, 118, 59, 0.36);
+  background: transparent;
+  color: var(--gold);
+}
+
+.method-note {
+  max-width: 580px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.method-note summary { color: var(--ink); cursor: pointer; }
+.method-note p { margin: 12px 0 0; }
+
+.intro-aside {
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 34px;
+  border-left: 1px solid rgba(152, 118, 59, 0.45);
+  background: linear-gradient(180deg, rgba(247, 241, 226, 0.7), rgba(242, 246, 239, 0.42));
+  box-shadow: 0 26px 70px var(--shadow);
+}
+
+.edition-card { display: flex; gap: 20px; align-items: flex-start; }
+.edition-number { color: var(--gold); font-family: Georgia, serif; font-size: 3rem; line-height: 1; }
+.edition-card p { margin: 2px 0 14px; color: var(--gold); font-size: 0.72rem; letter-spacing: 0.18em; }
+.edition-card strong { font-family: var(--serif); font-size: 1.35rem; font-weight: 400; line-height: 1.65; }
+
+.motif-lines { display: grid; gap: 10px; margin: 54px 0 28px; }
+.motif-lines span { display: block; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
+.motif-lines span:nth-child(2) { width: 78%; }
+.motif-lines span:nth-child(3) { width: 54%; }
+.aside-caption { margin: 0; color: var(--ink-soft); font-family: Georgia, serif; font-size: 0.82rem; font-style: italic; }
+
+.intro-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+}
+
+.compact-header { padding-bottom: 18px; }
+
+.progress-track {
+  height: 3px;
+  margin: 0;
+  background: rgba(33, 54, 46, 0.09);
+}
+
+.progress-track span {
+  display: block;
+  width: 4.1667%;
+  height: 100%;
+  background: var(--gold-bright);
+  transition: width 260ms ease;
+}
+
+.quiz-layout {
+  width: min(920px, 100%);
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: clamp(36px, 7vw, 88px);
+  align-items: start;
+  margin: 0 auto;
+  padding: clamp(56px, 10vh, 110px) 0 56px;
+}
+
+.question-context { position: sticky; top: 30px; }
+.question-guidance { margin: 0; color: var(--ink-soft); font-size: 0.88rem; }
+
+.question-card {
+  padding: clamp(24px, 5vw, 46px);
+  border: 1px solid rgba(152, 118, 59, 0.28);
+  background: rgba(247, 241, 226, 0.54);
+  box-shadow: 0 24px 62px var(--shadow);
+}
+
+.question-card fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.question-card legend {
+  width: 100%;
+  margin-bottom: 10px;
+  font-family: var(--serif);
+  font-size: clamp(1.55rem, 3.5vw, 2.35rem);
+  line-height: 1.45;
+}
+
+.question-description {
+  max-width: 640px;
+  margin: 0 0 28px;
+  padding-left: 14px;
+  border-left: 2px solid var(--gold-bright);
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+.answer-options { display: grid; gap: 10px; }
+
+.answer-options[data-kind="choice"] { gap: 12px; }
+
+.answer-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: 1px solid rgba(75, 91, 81, 0.2);
+  background: rgba(255, 255, 255, 0.24);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.answer-options[data-kind="choice"] .answer-option {
+  min-height: 70px;
+  align-items: start;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.answer-option:hover { border-color: rgba(152, 118, 59, 0.52); transform: translateX(2px); }
+.answer-option:has(input:checked) { border-color: var(--gold); background: rgba(221, 206, 163, 0.28); }
+.answer-option input { position: absolute; opacity: 0; pointer-events: none; }
+.answer-index { color: var(--gold); font-family: Georgia, serif; font-size: 0.8rem; }
+.answer-label { font-size: 0.95rem; }
+.answer-options[data-kind="choice"] .answer-label { line-height: 1.65; }
+.answer-dot { width: 9px; height: 9px; border: 1px solid var(--gold); border-radius: 50%; }
+.answer-option:has(input:checked) .answer-dot { background: var(--gold); box-shadow: inset 0 0 0 2px var(--surface-warm); }
+
+.question-error { margin: 16px 0 0; color: #815540; font-size: 0.86rem; }
+.quiz-actions { justify-content: space-between; margin-top: 28px; }
+
+.result-content {
+  width: min(970px, 100%);
+  flex: 1;
+  margin: 0 auto;
+  padding: clamp(54px, 8vh, 92px) 0 48px;
+}
+
+.result-kicker { margin: 0 0 14px; color: var(--gold); font-size: 0.75rem; letter-spacing: 0.2em; }
+.result-badge {
+  display: inline-flex;
+  margin-bottom: 18px;
+  padding: 6px 12px;
+  border: 1px solid rgba(152, 118, 59, 0.42);
+  border-radius: 999px;
+  color: var(--gold);
+  background: rgba(247, 241, 226, 0.42);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+}
+.result-heading { max-width: 760px; margin: 0; font-family: var(--serif); font-size: clamp(2.5rem, 6vw, 4.9rem); font-weight: 400; line-height: 1.16; }
+.result-summary { max-width: 740px; margin: 26px 0 0; color: var(--ink-soft); font-family: var(--serif); font-size: clamp(1.05rem, 2vw, 1.28rem); line-height: 1.9; }
+.result-core {
+  max-width: 780px;
+  margin: 24px 0 0;
+  padding: 20px 22px;
+  border-left: 3px solid var(--gold-bright);
+  background: rgba(247, 241, 226, 0.44);
+  color: var(--ink);
+  line-height: 1.85;
+}
+
+.evidence-panel {
+  margin-top: 38px;
+  padding: clamp(24px, 4vw, 36px);
+  border: 1px solid rgba(152, 118, 59, 0.3);
+  background: rgba(242, 246, 239, 0.48);
+}
+.evidence-panel h2 { margin: 0; font-family: var(--serif); font-size: 1.7rem; font-weight: 400; }
+.evidence-panel ul { display: grid; gap: 12px; margin: 20px 0 0; padding: 0; list-style: none; }
+.evidence-panel li { position: relative; padding-left: 22px; color: var(--ink-soft); }
+.evidence-panel li::before { content: "✦"; position: absolute; left: 0; color: var(--gold); }
+.history-note { margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-soft); }
+.history-note strong { color: var(--ink); font-weight: 500; }
+.route-note { margin-top: 20px; padding: 16px 18px; background: rgba(221, 206, 163, 0.2); }
+.route-note span { color: var(--gold); font-size: 0.72rem; letter-spacing: 0.12em; }
+.route-note p { margin: 5px 0 0; color: var(--ink); }
+
+.result-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 24px; margin-top: 44px; }
+.result-panel { padding: clamp(24px, 4vw, 36px); border: 1px solid rgba(152, 118, 59, 0.28); background: rgba(247, 241, 226, 0.55); }
+.result-panel h2, .result-panel h3 { margin: 0; font-family: var(--serif); font-weight: 400; }
+.result-panel h2 { font-size: 1.65rem; }
+.result-panel h3 { font-size: 1.2rem; }
+.result-panel p { color: var(--ink-soft); }
+.result-panel-feature { background: linear-gradient(145deg, rgba(247, 241, 226, 0.78), rgba(242, 246, 239, 0.5)); }
+.result-panel ul, .action-list { margin: 18px 0 0; padding-left: 1.25em; }
+.result-panel li, .action-list li { margin: 12px 0; }
+
+.companion-label { margin: 0 0 10px; color: var(--gold); font-size: 0.74rem; letter-spacing: 0.16em; }
+.score-list { display: grid; gap: 14px; margin-top: 24px; }
+.score-row { display: grid; grid-template-columns: 130px 1fr 36px; gap: 12px; align-items: center; font-size: 0.82rem; }
+.score-track { height: 6px; background: rgba(33, 54, 46, 0.09); }
+.score-track span { display: block; height: 100%; background: var(--gold-bright); }
+.score-row strong { text-align: right; font-weight: 500; }
+.score-note { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--line); font-size: 0.76rem; line-height: 1.65; }
+.low-intensity-note { max-width: 740px; margin: 18px 0 0; padding-left: 14px; border-left: 2px solid var(--gold-bright); color: var(--ink-soft); font-size: 0.86rem; }
+.asset-note { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.asset-note span { color: var(--gold); font-size: 0.72rem; letter-spacing: 0.14em; }
+.asset-note p { margin: 7px 0 0; }
+
+.action-panel { margin-top: 24px; padding: clamp(26px, 4vw, 40px); background: var(--ink); color: #f5f0df; }
+.action-panel .result-kicker { color: var(--gold-pale); }
+.action-panel h2 { margin: 0; font-family: var(--serif); font-size: 1.8rem; font-weight: 400; }
+.action-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 0; list-style: none; counter-reset: actions; }
+.action-list li { counter-increment: actions; margin: 0; padding-top: 16px; border-top: 1px solid rgba(221, 206, 163, 0.32); }
+.action-list li::before { content: "0" counter(actions); display: block; margin-bottom: 9px; color: var(--gold-pale); font-family: Georgia, serif; }
+
+.ritual-panel {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 26px;
+  align-items: start;
+  margin-top: 24px;
+  padding: clamp(26px, 4vw, 40px);
+  border: 1px solid rgba(152, 118, 59, 0.34);
+  background:
+    radial-gradient(circle at 95% 8%, rgba(196, 164, 95, 0.22), transparent 13rem),
+    rgba(247, 241, 226, 0.62);
+}
+.ritual-symbol {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font-family: Georgia, serif;
+  font-size: 1.45rem;
+}
+.ritual-panel h2 { margin: 0; font-family: var(--serif); font-size: 1.75rem; font-weight: 400; }
+.ritual-action { margin: 14px 0 0; color: var(--ink); font-family: var(--serif); font-size: 1.08rem; line-height: 1.85; }
+.ritual-note { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.76rem; }
+
+.dossier-preview {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(30px, 6vw, 72px);
+  margin-top: 48px;
+  padding: clamp(30px, 5vw, 54px);
+  color: #f5f0df;
+  background:
+    linear-gradient(120deg, rgba(196, 164, 95, 0.13), transparent 42%),
+    var(--ink);
+  box-shadow: 0 28px 70px rgba(33, 54, 46, 0.18);
+}
+.dossier-copy .result-kicker { color: var(--gold-pale); }
+.dossier-copy h2 { margin: 0; font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.75rem); font-weight: 400; line-height: 1.35; }
+.dossier-copy > p:not(.result-kicker) { color: rgba(245, 240, 223, 0.74); }
+.dossier-cta { margin-top: 14px; background: var(--surface-warm); color: var(--ink); box-shadow: none; }
+.dossier-cta:hover { background: #fff9e8; }
+.dossier-pending { padding: 13px 15px; border: 1px solid rgba(221, 206, 163, 0.34); color: var(--gold-pale) !important; font-size: 0.84rem; }
+.dossier-note { margin-top: 16px; font-size: 0.73rem; line-height: 1.65; }
+.locked-list { align-self: center; border-top: 1px solid rgba(221, 206, 163, 0.28); }
+.locked-row {
+  display: grid;
+  grid-template-columns: 34px 1fr 28px;
+  gap: 12px;
+  align-items: center;
+  min-height: 72px;
+  border-bottom: 1px solid rgba(221, 206, 163, 0.28);
+}
+.locked-row > span:first-child { color: var(--gold-pale); font-family: Georgia, serif; font-size: 0.8rem; }
+.locked-row strong { font-weight: 400; line-height: 1.55; }
+.lock-mark { color: rgba(221, 206, 163, 0.66); font-size: 0.72rem; text-align: right; }
+
+.result-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.result-footer p { max-width: 760px; margin: 0; color: var(--ink-soft); font-size: 0.76rem; }
+.result-footer .button { flex: 0 0 auto; }
+
+@media (max-width: 820px) {
+  .intro-layout { grid-template-columns: 1fr; gap: 42px; padding-top: 48px; }
+  .intro-aside { min-height: auto; }
+  .quiz-layout { grid-template-columns: 1fr; gap: 22px; padding-top: 44px; }
+  .question-context { position: static; }
+  .question-context .eyebrow { margin-bottom: 8px; }
+  .result-grid { grid-template-columns: 1fr; }
+  .action-list { grid-template-columns: 1fr; }
+  .dossier-preview { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .screen { padding: 20px 18px 24px; }
+  .site-header { gap: 12px; }
+  .privacy-note { max-width: 112px; text-align: right; }
+  .brand small { letter-spacing: 0.14em; }
+  h1 { font-size: clamp(2.1rem, 10vw, 2.85rem); }
+  .intro-lead { margin-top: 22px; }
+  .test-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 0.78rem; }
+  .test-meta span { justify-content: center; padding: 8px 4px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: center; }
+  .test-meta span::after { display: none; }
+  .intro-actions { align-items: stretch; flex-direction: column; }
+  .intro-actions .button { width: 100%; }
+  .intro-aside { padding: 26px; }
+  .intro-footer { flex-direction: column; gap: 4px; }
+  .question-card { padding: 22px 16px; }
+  .answer-option { grid-template-columns: 24px 1fr 12px; padding: 12px; }
+  .answer-options[data-kind="choice"] .answer-option { min-height: 76px; }
+  .quiz-actions { gap: 10px; }
+  .quiz-actions .button { flex: 1; padding-left: 14px; padding-right: 14px; }
+  .score-row { grid-template-columns: 112px 1fr 32px; gap: 8px; }
+  .ritual-panel { grid-template-columns: 1fr; }
+  .ritual-symbol { width: 52px; height: 52px; }
+  .dossier-preview { padding: 28px 20px; }
+  .dossier-cta { width: 100%; }
+  .result-footer { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+
+.question-count{font-size:14px}.eyebrow,.result-kicker,.companion-label{font-size:13px}.question-guidance,.intro-footer,.result-footer p,.ritual-note{font-size:14px}.intro-aside{min-height:360px}.question-card legend{font-size:clamp(1.6rem,3vw,2.25rem)}.result-heading{font-size:clamp(2.3rem,5vw,4rem)}.pair-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,4vw,3rem);margin:20px 0}.archetype-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:30px 0}.archetype-card{padding:30px;border:1px solid rgba(152,118,59,.4);background:linear-gradient(140deg,rgba(247,241,226,.85),rgba(242,246,239,.45))}.archetype-card .ratio{font:normal clamp(3rem,6vw,5rem)/1 Georgia,serif;color:var(--gold)}.archetype-card h2{font:400 1.9rem/1.4 var(--serif);margin:20px 0 8px}.archetype-card p{color:var(--ink-soft)}.archetype-card .tags{font-size:14px;color:var(--gold)}.archetype-card .role{font-size:14px;margin:0}.ratio-note{font-size:14px;color:var(--ink-soft)}.report-block{margin:24px 0;padding:30px;border:1px solid var(--line);background:rgba(247,241,226,.5)}.report-block h2{font:400 1.7rem/1.4 var(--serif);margin:0 0 14px}.report-block p{margin:12px 0;color:var(--ink-soft)}.report-block .evidence{padding-top:16px;border-top:1px solid var(--line);font-size:14px}.direction-chips{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.direction-chips span{border:1px solid rgba(152,118,59,.4);padding:8px 15px;border-radius:99px;font-size:14px}.dossier-copy h2{font-size:2rem}.dossier-note{font-size:14px}.locked-row strong{font-size:16px}.locked-row{min-height:84px}.draft-note{font-size:14px;color:var(--gold)}.one-action{font-size:1.1rem;line-height:1.85}.quiz-layout{padding-top:50px}.answer-label{font-size:16px}.intro-layout{padding-top:50px}.intro-actions{margin-top:24px}@media(max-width:650px){.archetype-grid{grid-template-columns:1fr}.archetype-card{padding:24px}.report-block{padding:24px}.quiz-layout{padding-top:28px}.intro-layout{padding-top:35px}.privacy-note{font-size:13px}.question-count{max-width:135px;text-align:right}}
+</style>
+</head>
+<body>
+<main class="app-shell">
+  <section id="intro" class="screen intro-screen">
+    <header class="site-header"><a class="brand" href="#"><span class="brand-monogram">H</span><span><strong>HERSPERIA</strong><small>赫境</small></span></a><span class="privacy-note">无需工作或投资经验</span></header>
+    <div class="intro-layout"><div class="intro-copy">
+      <p class="eyebrow">THE WEALTH ARCHETYPES · EDITION 02</p>
+      <h1>你的财富风格，<br>是哪两位人物<br>的相遇？</h1>
+      <p class="intro-lead">品位、好奇心、判断力、与人相处的方式——你习以为常的选择里，可能藏着值得探索的增长倾向。</p>
+      <div class="test-meta"><span>约 3 分钟</span><span>12–13 道题</span><span>双人物组合</span></div>
+      <div class="intro-actions"><button id="start" class="button button-primary">探索我的财富原型</button></div>
+      <details class="method-note"><summary>它如何理解我的答案？</summary><p>先了解你的实际经历，再选择适合你的场景。人物是行为风格的叙事原型；百分比表示本测试中两种突出倾向的相对构成，不是财富能力、成功概率或与人物的真实相似度。</p></details>
+    </div><aside class="intro-aside"><div class="edition-card"><span class="edition-number">02</span><div><p>ARCHETYPE STUDY</p><strong>一种被你低估的天赋，<br>一种尚未展开的可能。</strong></div></div><div class="motif-lines"><span></span><span></span><span></span></div><p class="aside-caption">Two tendencies. One personal story.</p></aside></div>
+    <footer class="intro-footer"><span>不收集手机号、邮箱或收入金额</span><span>答案仅留在当前页面会话</span></footer>
+  </section>
+  <section id="quiz" class="screen quiz-screen" hidden>
+    <header class="site-header"><button id="home" class="brand brand-button"><span class="brand-monogram">H</span><span><strong>HERSPERIA</strong><small>财富原型</small></span></button><span id="count" class="question-count"></span></header>
+    <div class="progress-track" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="100"><span id="progress"></span></div>
+    <div class="quiz-layout"><div class="question-context"><p id="section" class="eyebrow"></p><p class="question-guidance">选最自然的反应即可，<br>每个选项都代表一种取向。</p></div>
+    <form id="form" class="question-card"><fieldset aria-describedby="description"><legend id="title"></legend><p id="description" class="question-description"></p><div id="options" class="answer-options" data-kind="choice"></div></fieldset><p id="error" class="question-error" hidden>选一个最接近你的答案，再继续。</p><div class="quiz-actions"><button id="back" type="button" class="button button-text">上一题</button><button id="next" class="button button-primary">下一题</button></div></form></div>
+  </section>
+  <section id="result" class="screen result-screen" hidden><header class="site-header"><span class="brand"><span class="brand-monogram">H</span><span><strong>HERSPERIA</strong><small>PERSONAL ARCHETYPE NOTE</small></span></span><span class="privacy-note">你的双原型档案</span></header><div id="report" class="result-content"></div><footer class="result-footer"><p>人物原型用于内容体验与自我探索。测试未经过心理测量验证，也不预测收入或提供投资建议；人物姓名不代表本人或相关品牌参与、认可本测试。</p><button id="retake" class="button button-text">重新探索</button></footer></section>
+</main>
+<script>window.HERSPERIA_ARCHETYPES = {
+  people: {
+    JUD:{name:"查理·芒格",role:"投资者 · 理性判断原型",tags:"筛选信息 · 独立判断 · 看清代价",strength:"你容易从热闹的信息里寻找依据，愿意先理解关键条件，再决定是否投入。",shadow:"判断如果迟迟没有落到选择上，清醒也可能变成等待。",direction:["研究与分析","专业知识表达"],ritual:"开始一天前，写下今天最值得验证的一个问题，只为它保留一段安静时间。"},
+    ACT:{name:"拿破仑",role:"历史军事人物 · 推进原型",tags:"目标感 · 主动推进 · 调动资源",strength:"你习惯让事情真正发生，面对不确定时，往往能先找到一个可以推动的动作。",shadow:"推进的速度有时会超过检验的速度，容易在投入之后才发现边界。",direction:["项目推进","协作与组织"],ritual:"早晨用五分钟伸展身体，再完成一件小事，让一天从可见的进度开始。"},
+    COM:{name:"沃伦·巴菲特",role:"投资者 · 长期积累原型",tags:"耐心 · 持续投入 · 积累意识",strength:"你愿意让时间参与成果，能够在没有即时惊喜的日子里，继续维护值得积累的事情。",shadow:"熟悉的节奏带来安全感，也可能让你较晚发现外部条件已经变化。",direction:["长期技能积累","持续内容或资产习惯"],ritual:"准备一张连续记录卡，每天留下一个小成果；七天后看见它们连成一条线。"},
+    AES:{name:"雅诗·兰黛",role:"美妆品牌创始人 · 感知价值原型",tags:"审美辨识 · 吸引力 · 品牌感",strength:"你会留意风格、包装和细微体验，容易感受到同样的东西为什么有不同的吸引力。",shadow:"你喜欢的呈现方式，未必就是别人愿意为之付费的价值；两者需要一次相遇。",direction:["选品与风格表达","品牌与内容"],ritual:"整理一块你每天会看见的小空间，留下三件真正代表你品位的物品。"},
+    SOC:{name:"奥普拉·温弗瑞",role:"媒体人物 · 信任连接原型",tags:"共情 · 表达 · 关系信任",strength:"你容易注意到话语背后的感受，能把别人的需要转成让人愿意听下去的表达。",shadow:"照顾别人的感受过多时，你自己的边界和价值也可能变得不够清楚。",direction:["沟通与服务","社群与故事表达"],ritual:"每天留下十分钟，写一句自己的真实需要；再带着清楚的边界与人交流。"},
+    CRE:{name:"史蒂夫·乔布斯",role:"科技企业家 · 体验创造原型",tags:"产品直觉 · 创意整合 · 聚焦体验",strength:"你会从“不够顺手”的细节里看到另一种可能，喜欢把分散的想法重新组合。",shadow:"理想的完成度有时会拖慢你与真实使用者见面，作品需要留一点被反馈改变的空间。",direction:["产品与体验设计","创作与工具"],ritual:"每天记下一个让你觉得不顺手的细节，再画或写一个更简单的版本。"},
+    EXP:{name:"萨拉·布莱克莉",role:"SPANX 创始人 · 机会试验原型",tags:"观察需求 · 小步尝试 · 生活洞察",strength:"你能从日常不方便中看到需求，更愿意用小尝试获得答案，而不是只在脑中评估。",shadow:"新的可能性太多时，实验也会互相争夺注意力，需要为每次尝试留一个结束点。",direction:["兴趣需求观察","小规模市场验证"],ritual:"准备一本“发现本”，每天记一件别人嫌麻烦的事，只选其中一件继续观察。"},
+    SYS:{name:"约翰·洛克菲勒",role:"历史企业家 · 系统组织原型",tags:"资源安排 · 流程 · 结构效率",strength:"你容易看见事情之间的关系，喜欢让预算、步骤和分工各有位置，减少重复消耗。",shadow:"规则能提高效率，但当人和环境变化时，系统也需要保留调整空间。",direction:["流程与运营","资源组织与复用"],ritual:"睡前整理明天要用的三样物品，让第一步少一次寻找、少一次决定。"}
+  },
+  routeQuestions: [
+    {id:"life",section:"从你的生活开始",prompt:"哪种描述最接近你现在的生活？",description:"只决定后面使用的场景，不代表能力高低。",options:[{id:"L0",label:"学生、尚未工作，或主要精力还在学习和兴趣上。"},{id:"L1",label:"已经工作，主要靠职业收入，暂时很少做额外尝试。"},{id:"L2",label:"正在尝试副业、投资、接单或小生意，还在找稳定方法。"},{id:"L3",label:"已经持续经营收入或资产，正考虑怎样进一步放大。"},{id:"transition",label:"正在转型或调整，以上描述都不太合适。"}]},
+    {id:"experience",section:"找到熟悉的场景",prompt:"过去一年，你更常亲自处理哪类事情？",description:"按真实经历选一个最熟悉的；没有相关经历就选最后一项。",options:[{id:"daily",label:"学习、兴趣、消费和朋友之间的日常安排。"},{id:"career",label:"工作任务、职业选择与固定收入的安排。"},{id:"business",label:"接单、客户、产品、内容收入或经营尝试。"},{id:"investment",label:"储蓄、长期投资与资产安排，并定期检查。"},{id:"none",label:"目前没有固定场景，想先从生活和兴趣了解自己。"}]},
+    {id:"perception",section:"你的自我期待",prompt:"想到未来五年的财富，你更接近哪种感觉？",description:"这是你对未来的感受，不参与人物计分。",options:[{id:"curious",label:"很好奇，还不知道自己适合什么。"},{id:"uncertain",label:"想让生活更宽裕，但不知道第一步在哪里。"},{id:"potential",label:"觉得自己有潜力，想找到一个值得尝试的入口。"},{id:"breakthrough",label:"已经积累了一些成果，希望获得明显突破。"},{id:"next",label:"现有道路总体不错，想看清下一阶段的空间。"}]}
+  ],
+  common: [
+    {id:"C1",section:"你的自然取向",prompt:"遇到一件很喜欢的东西，你最先被什么吸引？",description:"可以是一本书、一件衣服、一个工具或一场活动。",labels:["它的风格与细节，让人想继续看下去。","它解决了一个我以前没想到的麻烦。","别人使用它时的感受和故事。","它为什么有效，能不能经得起比较。"],pairs:[["AES","CRE"],["EXP","ACT"],["SOC","COM"],["JUD","SYS"]]},
+    {id:"C2",section:"你的自然取向",prompt:"一起完成一件事时，你最自然承担什么？",description:"学习小组、朋友活动、工作任务都可以；没有经历就按最可能的反应。",labels:["把时间、步骤和分工安排清楚。","先推动第一步，让大家开始行动。","照顾沟通，让不同的人能合作。","想出一个更好看或更顺手的做法。"],pairs:[["SYS","JUD"],["ACT","EXP"],["SOC","COM"],["CRE","AES"]]}
+  ],
+  scenes: {
+    daily:[
+      ["你熟悉的兴趣圈里出现一个新东西，你会先做什么？","周边、活动、社群功能或学习工具都可以。",["看看设计和体验，哪里最有吸引力。","试着做一个小版本，看看能否解决自己的需要。","听听朋友为什么喜欢，谁最需要它。","比较资料，看看它与已有选择有什么区别。"]],
+      ["一件喜欢的事，怎样更容易让你坚持？","不要求把兴趣变成收入，只观察你投入的方式。",["给它固定时间，并整理可继续使用的资料。","先定一个小目标，做起来再慢慢调整。","有人一起交流，我就更愿意持续。","不断打磨作品，让它越来越符合自己的品位。"]],
+      ["如果多出一小笔钱，你最想让它带来什么？","按真正愿意承担的小支出回答，不涉及具体投资产品。",["一次很小的新尝试，让我发现更多可能。","留给一件值得长期积累的事。","改善每天会用到的物品或体验。","把接下来的学习和生活安排得更顺畅。"]],
+      ["朋友夸你擅长某件事时，你最想继续了解什么？","比如整理资料、搭配、写作、沟通或解决小麻烦。",["他们具体看中了什么，能否说出例子。","能不能马上找个场景再试一次。","怎样一直做下去，逐渐留下自己的积累。","能否把这件事整理成别人也能使用的方法。"]]
+    ],
+    career:[
+      ["工作中发现一种更好的做法，你通常先做什么？","按你熟悉的任务回答，无需管理经验。",["调整细节，让成果更清楚、更好用。","先在一个小任务里试出效果。","问使用者或同事，最需要改善哪一处。","比较新旧方法的依据和成本。"]],
+      ["一项能力需要半年才能见效，什么最支持你？","可以是学习、考证、作品积累或职业准备。",["把它放进固定流程，持续记录进展。","定阶段目标，每完成一段就推进下一段。","有人交流和反馈，让我知道价值在哪里。","不断完善作品，逐渐形成自己的表达。"]],
+      ["得到一段空闲时间，你更想用它换来什么？","想象本周有两小时可由你自己安排。",["验证一个新的职业或增收想法。","在一项长期能力上再积累一点。","改善作品呈现，让别人更容易看见。","整理重复工作，让以后少消耗一些时间。"]],
+      ["一项工作做得很好后，你更自然关注什么？","按你的实际反应选，不要求已经获得晋升。",["哪些事实证明它创造了价值。","下一次能否承担更大的推进任务。","这项优势怎样形成长期口碑。","能否整理成模板，让成果重复发生。"]]
+    ],
+    business:[
+      ["发现一个可能有人愿意付费的需求，你先看什么？","按接单、内容、产品或小生意的经历理解。",["呈现与体验怎样才能让价值更容易被感知。","用小投入测试，看看有没有真实反应。","哪些人需要它，他们实际怎么描述问题。","已有付费证据和成本条件是否站得住。"]],
+      ["一个方向开始有收入，你更自然做什么？","假设已有初步反馈，尚未需要全面扩张。",["整理流程和数据，减少重复判断。","定下下一轮目标，推动更多验证。","与客户保持交流，建立长期信任。","打磨体验与表达，形成鲜明辨识度。"]],
+      ["可以增加一点投入时，你希望它先带来什么？","预算与必要生活支出分开，只讨论可承受的小投入。",["验证一个尚未被证实的新机会。","让已有方向持续积累，结果更稳定。","提高客户能感受到的价值。","减少交付消耗，让增长更容易重复。"]],
+      ["增长暂时慢下来，你最想先弄清哪件事？","不预设是失败，也不要求你应该继续或停止。",["需求、成本和数据究竟发生了什么变化。","哪个动作最快带来新的真实反馈。","哪些长期积累仍值得保留。","流程或资源安排是否限制了当前效率。"]]
+    ],
+    investment:[
+      ["遇到一个陌生的资金安排，你先关注什么？","这里只观察评估习惯，不推荐任何投资产品。",["它是否透明、易理解，使用体验是否清楚。","能否通过模拟或观察先了解它。","不同使用者的真实需要与经验。","收益来源、费用、风险与信息依据。"]],
+      ["一套长期资金安排能持续，最依赖什么？","储蓄、应急金与长期投资都可以；按你熟悉的一项回答。",["规则清楚、定期检查，尽量减少临时决策。","目标明确，变化后能及时执行调整。","有人交流，帮助我理解自己的需要。","结构直观、工具顺手，让我愿意长期使用。"]],
+      ["有一笔可承受的小额探索预算，你更看重什么？","前提是基本生活、必要还债与应急需要已经有安排。",["获得一种新的观察或验证经验。","服务于一个清楚的长期目标。","改善信息呈现，让决策更容易理解。","让各部分用途更清楚，检查更省力。"]],
+      ["面对短期波动，你最想先检查什么？","关注你的判断过程，不评价买入、持有或卖出是否正确。",["原先依据是否改变，有没有遗漏信息。","是否达到事先约定的调整条件。","长期目标和可承受范围是否仍适用。","各部分用途、比例与检查规则是否清楚。"]]
+    ]
+  },
+  scenePairs:[[["AES","CRE"],["EXP","ACT"],["SOC","COM"],["JUD","SYS"]],[["SYS","COM"],["ACT","EXP"],["SOC","JUD"],["CRE","AES"]],[["EXP","ACT"],["COM","JUD"],["AES","SOC"],["SYS","CRE"]],[["JUD","SOC"],["ACT","EXP"],["COM","AES"],["SYS","CRE"]]],
+  advanced:{
+    business:[
+      ["评估一个新市场时，你最先寻找什么？","按你已经熟悉的经营方式回答。",["品牌与体验在哪些细节上还有空白。","一个能低成本验证的切入口。","现有客户或合作方尚未被满足的需要。","需求证据、成本结构与进入条件。"]],
+      ["已有业务稳定后，你更想把哪种能力放大？","四个方向都可能合理，选你最自然关注的一项。",["规则与协作，让成果不必每次从头组织。","推进关键目标，让新的增长真正发生。","客户关系与信任，让连接持续产生价值。","产品与品牌体验，让优势更有辨识度。"]],
+      ["重新安排增长资源时，你最想保留什么空间？","这里只比较取向，不要求你增加任何投入。",["小范围探索未知机会的空间。","长期主线持续积累的空间。","改善体验与感知价值的空间。","提高复用与协作效率的空间。"]],
+      ["现有方法效果变弱时，你先检查哪一层？","先找变化，不预设已经触及增长上限。",["需求和外部条件有没有改变。","关键动作是否推进到位。","长期积累是否仍然有效。","组织与资源安排能否承接当前规模。"]]
+    ],
+    investment:[
+      ["评估新的资产安排时，你先关注哪一层？","按已有决策经验选择，不讨论具体买卖。",["信息是否透明，结构是否容易理解。","能否先模拟或小范围观察。","它是否符合自己与家庭的实际需要。","收益来源、风险关联与评估依据。"]],
+      ["持续管理资产时，你更依赖哪种方式？","选择你最自然使用的决策支点。",["检查规则与整体结构，减少重复决策。","到达条件就执行事先确定的调整。","交流不同观点，检查自己的真实目标。","改进工具与信息呈现，让复杂安排更直观。"]],
+      ["调整资源配置时，你最希望它带来什么？","假设基本生活与应急需要已有独立安排。",["获得对新方向的少量验证信息。","让长期主线继续形成积累。","让目标与实际体验更匹配。","让各部分角色和整体效率更清楚。"]],
+      ["当表现偏离预期，你先重新检查什么？","这里只观察判断过程，不指示具体交易。",["原先依据和风险关联是否变化。","是否触发已有调整条件。","长期目标与承受范围是否仍一致。","各部分角色、比例与管理规则是否有效。"]]
+    ]
+  },
+  validation:[
+    {id:"V1",section:"最后看看偏好",prompt:"不考虑外界评价，你更享受哪种成就感？",description:"不是选最厉害的，而是选你最想再体验一次的。",labels:["看清一件复杂事情，并作出有依据的选择。","把停着的事情推动起来，看到具体结果。","做出有风格、让人觉得舒服的作品。","解决一个小问题，并发现还有人需要。"],pairs:[["JUD","COM"],["ACT","SYS"],["AES","SOC"],["EXP","CRE"]]},
+    {id:"V2",section:"最后看看偏好",prompt:"未来一年，你更愿意重复哪种投入？",description:"四种方式都能产生价值，选最贴近你的节奏。",labels:["持续积累一件事，定期检查它是否仍值得。","把重复事情整理成稳定的方法。","理解人、连接人，让关系产生新的可能。","不断改进体验，把想法变成看得见的东西。"],pairs:[["COM","JUD"],["SYS","ACT"],["SOC","AES"],["CRE","EXP"]]}
+  ],
+  interest:{id:"interest",section:"你想展开的可能",prompt:"拿到结果后，你最想进一步了解什么？",description:"只用于选择档案方向，不影响人物配比。",options:[{id:"hobby",label:"我的兴趣里，有哪些值得认真发展的潜力。"},{id:"career",label:"如何让职业能力与个人价值更容易被看见。"},{id:"business",label:"怎样理解我的增收或经营风格。"},{id:"asset",label:"怎样建立更适合自己的长期积累方式。"},{id:"system",label:"已有成果之上，还能展开哪些增长空间。"}]},
+  stageCopy:{
+    L0:{title:"先让你的日常兴趣，获得一个新的解释",copy:"你熟悉的圈子、愿意钻研的内容、总能看出差别的细节，都可以成为探索起点。它们需要通过作品、技能与真实反馈慢慢展开；当前最有价值的线索，是你愿意反复投入什么。",next:"从一个你已经熟悉的兴趣里，留下一个可以给别人看见的小成果。"},
+    L1:{title:"把已经形成的习惯，带到更有价值的位置",copy:"你已有职业与生活经验。下一段空间可能藏在现有能力怎样被识别、如何形成可复用成果，以及哪一种环境愿意认真看见它。",next:"回想最近一次被人认可的贡献，记录对方认可的具体部分。"},
+    L2:{title:"从有过尝试，走向看清自己的增长方式",copy:"你已经开始接触真实的经济反馈。接下来值得观察的，是个人优势在什么条件下能够重复出现，以及哪些投入只是带来忙碌、尚未形成积累。",next:"从最近一次尝试中，找出一条事实：是什么让别人愿意使用、回应或付费。"},
+    L3:{title:"下一量级，可能需要一种新的承接方式",copy:"持续经营让你拥有实际判断依据。个人优势仍然重要，而下一阶段也会检验流程、协作、渠道与资源环境，能否承接这种优势。这份组合提供观察角度，不预先断言你已经遇到上限。",next:"选一个已经反复产生价值的环节，观察它有多依赖你本人持续在场。"}
+  },
+  perceptionCopy:{curious:"你带着好奇而来，可以把结果当作一张探索地图。",uncertain:"如果现在对起点没有把握，先从已经出现的偏好与经验里找一个足够轻的入口。",potential:"你已经感受到自己的潜力，下一步值得寻找让潜力遇见真实反馈的条件。",breakthrough:"你想获得突破，这次更值得留意两种优势怎样合作，以及哪一部分需要新的条件。",next:"你关注下一阶段，可以用这份组合重新观察已有方法的适用边界。"},
+  interestCopy:{hobby:"兴趣与内容潜力",career:"职业价值与个人表达",business:"增收与经营风格",asset:"长期积累与决策习惯",system:"资源、协作与下一阶段"}
+};
+</script><script>const cfg=window.HERSPERIA_ARCHETYPES;
+const keys=Object.keys(cfg.people);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let answers={},index=0;
+const routeIds=cfg.routeQuestions.map(q=>q.id);
+function level(){
+  const life=answers.life,experience=answers.experience;
+  if(life==='L3'&&(experience==='business'||experience==='investment'))return 'L3';
+  if(experience==='business'||experience==='investment')return 'L2';
+  if(experience==='career')return 'L1';
+  return 'L0';
+}
+function track(){return {business:'business',investment:'investment',career:'career'}[answers.experience]||'daily';}
+function scored(q){return {...q,options:q.labels.map((label,i)=>({id:String(i),label,scores:{[q.pairs[i][0]]:2,[q.pairs[i][1]]:1}}))};}
+function scene(n){const bank=level()==='L3'&&cfg.advanced[track()]?cfg.advanced[track()]:cfg.scenes[track()];const s=bank[n];return scored({id:`S${n}`,section:track()==='daily'?'从兴趣寻找线索':track()==='career'?'从工作寻找线索':track()==='business'?'从实践寻找线索':'从资金习惯寻找线索',prompt:s[0],description:s[1],labels:s[2],pairs:cfg.scenePairs[n]});}
+function followup(){
+  const first=scene(0),option=first.options.find(o=>o.id===answers.S0);
+  if(!option)return null;
+  const pair=Object.keys(option.scores),p=cfg.people[pair[0]],s=cfg.people[pair[1]];
+  const language={JUD:'比较依据，确认真正重要的条件',ACT:'推动一个动作，让事情往前走',COM:'留下积累，让它可以持续下去',AES:'辨认吸引力，让价值更容易被感受到',SOC:'理解人的需要，让沟通更顺畅',CRE:'重新组合细节，让体验变得更好',EXP:'做一个小尝试，看看真实反应',SYS:'整理步骤和资源，让过程更顺畅'};
+  return {id:'F0',section:'跟随你刚才的选择',prompt:track()==='daily'?'哪一部分更让你想继续？':track()==='career'?'这种做法里，你更享受哪一部分？':'刚才的选择，最吸引你的是什么？',description:'你刚才的答案里有两条线索，这里再区分一下。',options:[{id:'a',label:language[pair[0]]+'。',scores:{[pair[0]]:2},evidence:p.tags},{id:'b',label:language[pair[1]]+'。',scores:{[pair[1]]:2},evidence:s.tags},{id:'both',label:'两部分同样重要，我更享受它们配合起来。',scores:{[pair[0]]:1,[pair[1]]:1}},{id:'unsure',label:'暂时说不清，先保留刚才的选择。',scores:{},exclude:true}]};
+}
+function path(){
+  const list=[...cfg.routeQuestions,...cfg.common.map(scored)];
+  const count=level()==='L0'?3:4;
+  for(let n=0;n<count;n++){list.push(scene(n));if(n===0){const f=followup();if(f)list.push(f);}}
+  return [...list,...cfg.validation.map(scored),cfg.interest];
+}
+function show(name){['intro','quiz','result'].forEach(id=>$(id).hidden=id!==name);window.scrollTo(0,0);}
+function render(){
+  const questions=path(),q=questions[index];
+  $('title').textContent=q.prompt;$('description').textContent=q.description;$('section').textContent=q.section;
+  const total=routeIds.includes(q.id)?13:level()==='L0'?12:13;
+  $('count').textContent=`${String(index+1).padStart(2,'0')} / ${routeIds.includes(q.id)?'约 13':total}`;
+  $('progress').style.width=`${index/total*100}%`;document.querySelector('.progress-track').setAttribute('aria-valuenow',String(Math.round(index/total*100)));
+  $('options').innerHTML=q.options.map((o,i)=>`<label class="answer-option"><input type="radio" name="answer" value="${esc(o.id)}" ${answers[q.id]===o.id?'checked':''}><span class="answer-index">${String.fromCharCode(65+i)}</span><span class="answer-label">${esc(o.label)}</span><span class="answer-dot"></span></label>`).join('');
+  $('back').hidden=index===0;$('next').textContent=q.id==='interest'?'查看我的双原型':'下一题';$('error').hidden=true;
+}
+function profile(){
+  const points=Object.fromEntries(keys.map(k=>[k,0])),max=Object.fromEntries(keys.map(k=>[k,0])),observations=Object.fromEntries(keys.map(k=>[k,0]));
+  const evidence=[];
+  path().forEach(q=>{const o=q.options.find(o=>o.id===answers[q.id]);if(!o||!o.scores||o.exclude)return;
+    keys.forEach(k=>{const possible=Math.max(...q.options.map(v=>v.scores?.[k]||0));if(possible){max[k]+=possible;observations[k]++;}points[k]+=o.scores[k]||0;});
+    evidence.push({text:o.label,scores:o.scores,id:q.id});
+  });
+  const scores=Object.fromEntries(keys.map(k=>[k,max[k]?points[k]/max[k]*100:0]));
+  const ranked=[...keys].sort((a,b)=>scores[b]-scores[a]||points[b]-points[a]||keys.indexOf(a)-keys.indexOf(b));
+  const [a,b]=ranked,total=scores[a]+scores[b];const percent=total?Math.round(scores[a]/total*100):50;
+  const cutoff=scores[b],tied=ranked.filter(k=>Math.abs(scores[k]-cutoff)<.0001);
+  return {a,b,percent,scores,points,observations,ranked,tied,evidence,level:level(),track:track(),perception:answers.perception,interest:answers.interest,total:path().length};
+}
+const pairNames={
+  'ACT-JUD':'谋略型开拓者','COM-SYS':'长期秩序构建者','AES-CRE':'审美价值创造者','AES-SOC':'影响力塑造者','ACT-EXP':'机会驱动型行动者','JUD-SOC':'洞察型连接者','CRE-SYS':'系统创新者','COM-EXP':'稳健机会探索者',
+  'ACT-COM':'耐心型推进者','ACT-AES':'风格型开拓者','ACT-SOC':'连接型推进者','ACT-CRE':'创意行动者','ACT-SYS':'执行架构师','AES-JUD':'审美洞察者','AES-COM':'长期风格经营者','AES-EXP':'品位探索者','AES-SYS':'品牌秩序构建者','COM-JUD':'深思型积累者','COM-SOC':'信任积累者','COM-CRE':'长期创造者','CRE-JUD':'理性创新者','EXP-JUD':'审慎探索者','JUD-SYS':'结构洞察者','CRE-SOC':'共情创造者','EXP-SOC':'需求连接者','SOC-SYS':'协作架构师','CRE-EXP':'体验探索者','EXP-SYS':'实验组织者'
+};
+function pairKey(a,b){return [a,b].sort().join('-');}
+function combination(r){
+  const a=cfg.people[r.a],b=cfg.people[r.b];
+  const tension={JUD:'先理解',ACT:'先推动',COM:'慢慢积累',AES:'感受吸引力',SOC:'理解他人',CRE:'改进体验',EXP:'试出答案',SYS:'搭好结构'};
+  return `一部分的你倾向于${tension[r.a]}，另一部分则更在意${tension[r.b]}。当两者配合时，你可以把“${a.tags.split(' · ')[0]}”带入“${b.tags.split(' · ')[0]}”，形成自己的做事方式。需要留意的是，两种偏好可能争夺先后次序；结果更适合用来观察你如何作出选择。`;
+}
+function result(){
+  const r=profile(),a=cfg.people[r.a],b=cfg.people[r.b],stage=cfg.stageCopy[r.level];
+  const directions=[...new Set([...a.direction,...b.direction])].slice(0,3);
+  const echoes=r.evidence.filter(e=>(e.scores[r.a]||0)+(e.scores[r.b]||0)>0).sort((x,y)=>((y.scores[r.a]||0)+(y.scores[r.b]||0))-((x.scores[r.a]||0)+(x.scores[r.b]||0))).slice(0,2);
+  const cards=[[a,r.percent],[b,100-r.percent]].map(([p,n])=>`<article class="archetype-card"><span class="ratio">${n}<small>%</small></span><h2>${esc(p.name)}</h2><p class="role">${esc(p.role)}</p><p class="tags">${esc(p.tags)}</p><p>${esc(p.strength)}</p></article>`).join('');
+  $('report').innerHTML=`<p class="result-kicker">YOUR TWO ARCHETYPES</p><span class="result-badge">基于你的 ${r.total} 项选择</span><h1 class="result-heading">${esc(pairNames[pairKey(r.a,r.b)]||'双原型探索者')}</h1><p class="result-summary">${esc(cfg.perceptionCopy[r.perception])}</p><div class="archetype-grid">${cards}</div><p class="ratio-note">配比是两种相对突出风格在本测试中的构成，不是财富能力或成功概率。${r.tied.length>1?'你的部分倾向得分接近，这个组合仍可继续探索。':''}</p>
+  <section class="report-block"><p class="companion-label">WHEN TWO TENDENCIES MEET</p><h2>你的组合，怎样产生吸引力</h2><p>${esc(combination(r))}</p><p class="evidence">你选择了：${echoes.map(e=>'“'+esc(e.text)+'”').join('；')}。这两条偏好，是本次组合的一部分线索。</p></section>
+  <div class="result-grid"><section class="result-panel"><p class="companion-label">YOUR UNFOLDED POSSIBILITY</p><h2>${esc(stage.title)}</h2><p>${esc(stage.copy)}</p><div class="direction-chips">${directions.map(d=>`<span>${esc(d)}</span>`).join('')}</div><p>这些是值得观察的入口，是否适合你还需要实际经验来确认。</p></section><section class="result-panel"><p class="companion-label">THE OTHER SIDE</p><h2>优势另一面的小张力</h2><p>${esc(a.shadow)}</p><p>${esc(b.shadow)}</p></section></div>
+  <section class="action-panel"><p class="result-kicker">ONE SMALL OPENING</p><h2>先给潜力一次出现的机会</h2><p class="one-action">${esc(stage.next)}</p></section>
+  <section class="ritual-panel"><span class="ritual-symbol">✦</span><div><p class="companion-label">YOUR RECENT RITUAL</p><h2>最近的开运启动动作</h2><p class="ritual-action">${esc(a.ritual)}</p><p class="ritual-note">把它当作一个帮助注意力落地的小仪式，不需要购买物品，也不预测运势或收益。</p></div></section>
+  <section class="dossier-preview"><div class="dossier-copy"><p class="result-kicker">THE NEXT CHAPTER</p><h2>你的双原型深度档案</h2><p>沿着你关心的“${esc(cfg.interestCopy[r.interest])}”，继续理解这两种风格如何在你的实际经历中协同。</p><button id="offer" class="button dossier-cta">查看深度档案预览</button><p id="offer-note" class="dossier-pending" hidden>这一版供你体验题目与结果。付费全文和购买入口尚未开放。</p><p class="dossier-note">深度内容将进一步展开适合当前经历的方向、所需条件和验证计划。</p></div><div class="locked-list">${['双原型协同：互补与决策张力',cfg.interestCopy[r.interest]+'：值得探索的路径','下一阶段：能力、资源与反馈条件','个人探索计划：怎样验证这份可能'].map((x,i)=>`<div class="locked-row"><span>0${i+1}</span><strong>${esc(x)}</strong><span class="lock-mark">锁</span></div>`).join('')}</div></section>`;
+  $('offer').onclick=()=>{$('offer-note').hidden=false;};show('result');
+}
+$('start').onclick=()=>{show('quiz');render();};$('home').onclick=()=>show('intro');$('back').onclick=()=>{if(index){index--;render();window.scrollTo(0,0);}};
+$('form').onsubmit=e=>{e.preventDefault();const q=path()[index],v=new FormData(e.currentTarget).get('answer');if(!q.options.some(o=>o.id===v)){$('error').hidden=false;return;}
+  const changed=answers[q.id]!==v;if(changed){const old=path();old.slice(index+1).forEach(x=>delete answers[x.id]);}answers[q.id]=v;
+  if(q.id==='interest'){result();return;}index++;render();window.scrollTo(0,0);
+};
+$('retake').onclick=()=>{answers={};index=0;show('intro');};
+window.HERSPERIA_PREVIEW={profile,path};
+</script>
+</body></html>
