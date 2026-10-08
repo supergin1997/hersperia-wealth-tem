@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="用几分钟识别当下更值得优先调整的财富行为与资源配置模式。"
+    />
+    <meta name="theme-color" content="#dce8de" />
+    <title>Hersperia · 财富增长阻力测试</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23dce8de'/%3E%3Cpath d='M17 15v34M47 15v34M17 32h30' stroke='%23916f34' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css?v=4" />
+  </head>
+  <body>
+    <main id="app" class="app-shell">
+      <section id="intro-screen" class="screen intro-screen" aria-labelledby="intro-title">
+        <header class="site-header">
+          <a class="brand" href="#" aria-label="Hersperia 首页">
+            <span class="brand-monogram" aria-hidden="true">H</span>
+            <span>
+              <strong>HERSPERIA</strong>
+              <small id="brand-subtitle">赫境</small>
+            </span>
+          </a>
+          <span class="privacy-note">仅保存在当前设备</span>
+        </header>
+
+        <div class="intro-layout">
+          <div class="intro-copy">
+            <p id="intro-eyebrow" class="eyebrow">WEALTH GROWTH · FIELD NOTE 01</p>
+            <h1 id="intro-title">未来五年，<br />你的财富增长<br />最容易卡在哪一环？</h1>
+            <p id="intro-lead" class="intro-lead">
+              不是判断你会不会赚钱，而是看清：此刻哪一种行为与资源配置模式，最值得先被调整。
+            </p>
+
+            <div id="test-meta" class="test-meta" aria-label="测试信息"></div>
+
+            <div class="intro-actions">
+              <button id="start-button" class="button button-primary" type="button">开始测试</button>
+              <button id="previous-result-button" class="button button-text" type="button" hidden>
+                查看上次结果
+              </button>
+            </div>
+
+            <details class="method-note">
+              <summary>开始前，我想知道它如何工作</summary>
+              <p id="method-note-copy">
+                请按过去 12 个月的真实状态作答。结果会呈现一个主要模式和一个伴随模式，帮助你选择下一步的小实验。
+              </p>
+            </details>
+          </div>
+
+          <aside class="intro-aside" aria-label="测试说明">
+            <div class="edition-card">
+              <span class="edition-number">01</span>
+              <div>
+                <p id="edition-kicker">PRIVATE DRAFT</p>
+                <strong id="edition-copy">增长不是更用力，<br />而是先看清阻力。</strong>
+              </div>
+            </div>
+            <div class="motif-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+            <p id="aside-caption" class="aside-caption">A quiet audit of attention, risk and value.</p>
+          </aside>
+        </div>
+
+        <footer class="intro-footer">
+          <span id="privacy-copy">本测试不收集手机号或邮箱</span>
+          <span id="advice-copy">非投资、财务或职业建议</span>
+        </footer>
+      </section>
+
+      <section id="quiz-screen" class="screen quiz-screen" aria-labelledby="question-title" hidden>
+        <header class="site-header compact-header">
+          <button class="brand brand-button" type="button" data-go-home aria-label="返回测试首页">
+            <span class="brand-monogram" aria-hidden="true">H</span>
+            <span><strong>HERSPERIA</strong><small id="quiz-brand-subtitle">财富增长阻力测试</small></span>
+          </button>
+          <span id="question-count" class="question-count">主题 01 / 12</span>
+        </header>
+
+        <div class="progress-track" role="progressbar" aria-label="答题进度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="1">
+          <span id="progress-bar"></span>
+        </div>
+
+        <div class="quiz-layout">
+          <div class="question-context">
+            <p id="question-section" class="eyebrow">你与行动</p>
+            <p id="question-guidance" class="question-guidance">选择最接近你过去 12 个月真实状态的一项。</p>
+          </div>
+
+          <form id="question-form" class="question-card">
+            <fieldset aria-describedby="question-description question-guidance">
+              <legend id="question-title">一个赚钱想法如果步骤不够清楚，我很难迈出第一步。</legend>
+              <p id="question-description" class="question-description"></p>
+              <div id="answer-options" class="answer-options"></div>
+            </fieldset>
+
+            <p id="question-error" class="question-error" role="alert" hidden>请选择一个答案再继续。</p>
+
+            <div class="quiz-actions">
+              <button id="back-button" class="button button-text" type="button">上一题</button>
+              <button id="next-button" class="button button-primary" type="submit">下一题</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="result-screen" class="screen result-screen" aria-labelledby="result-heading" hidden>
+        <header class="site-header compact-header">
+          <button class="brand brand-button" type="button" data-go-home aria-label="返回测试首页">
+            <span class="brand-monogram" aria-hidden="true">H</span>
+            <span><strong>HERSPERIA</strong><small>PERSONAL FIELD NOTE</small></span>
+          </button>
+          <span class="privacy-note">结果仅存于本机</span>
+        </header>
+
+        <div id="result-content" class="result-content" aria-live="polite"></div>
+
+        <footer class="result-footer">
+          <p>
+            <span id="disclaimer-copy">本问卷用于自我觉察与内容体验，不是经验证的心理测量工具，也不构成投资、财务、税务、职业或法律建议。结果仅反映此刻的自我陈述，不代表固定人格、能力高低或未来收入。</span>
+          </p>
+          <button id="retake-button" class="button button-text" type="button">重新测试</button>
+        </footer>
+      </section>
+    </main>
+
+    <noscript>请启用 JavaScript 以完成这份互动测试。</noscript>
+    <script src="./test-config.js?v=4" defer></script>
+    <script src="./app.js?v=4" defer></script>
+  </body>
+</html>
